@@ -9,7 +9,6 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation'; 
 
-
 const randomComments = ["구하라 그러면 너희에게 주실 것이요 찾으라 그러면 찾을 것이요 문을 두드리라 그러면 너희에게 열릴 것이니 구하는 이마다 얻을 것이요 찾는 이가 찾을 것이요 두드리는 이에게 열릴 것이니라",
   "그러므로 내가 너희에게 말하노니 무엇이든지 기도하고 구하는 것은 받은 줄로 믿으라 그리하면 너희에게 그대로 되리라",
   "아무것도 염려하지 말고 오직 모든 일에 기도와 간구로, 너희 구할 것을 감사함으로 하나님께 아뢰라 그리하면 모든 지각에 뛰어난 하나님의 평강이 그리스도 예수 안에서 너희 마음과 생각을 지키시리라",
@@ -37,10 +36,23 @@ export default function HomePage() {
   //const [content, setContent] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [submitted, setSubmitted] = useState(false);
   // hydration 오류가 나서 써야함. 
-  const [rand, setRand] = useState(0);
+  const [rand, setRand] = useState<number | null>(null);
+
   useEffect(() => {
     setRand(Math.floor(Math.random()*15));
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://unpkg.com/type-hangul";
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      const TypeHangul: any = (window as any).TypeHangul; 
+      TypeHangul.type('#target', {intervalType : 90});
+  }
+
   }, []);
 
   // 폼 제출 Handling  영역
@@ -66,7 +78,6 @@ export default function HomePage() {
       var content = '';
       if(inputRef.current){
         content = inputRef.current.value
-        console.log('Submitted value:', inputRef.current.value);
         const response = await fetch('/api/pray', {
           method: 'POST',
           headers: {
@@ -79,12 +90,17 @@ export default function HomePage() {
           }),
         });
   
-        if (!response.ok) {
+        if(response.ok){
+          setSuccessMessage('제출되었습니다.');
+          inputRef.current.value = '';
+          setSubmitted(true);
+
+        }else{
           const errorData = await response.json();
-          throw new Error(errorData.error || '기도제목 저장 실패');
+          throw new Error(errorData.error || '제출 실패');
         }
-        setSuccessMessage('기도제목이 저장되었습니다.');
-        inputRef.current.value = '';
+
+
       }
 
       // 다른 성공 처리 (예: 입력 필드 초기화, 성공 메시지 표시)
@@ -108,37 +124,21 @@ export default function HomePage() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
           <div className="max-w-xl lg:max-w-lg">
-            <h2 className="text-4xl font-semibold tracking-tight text-white" style={{fontFamily : 'Jeju Gothic', fontSize : '1.5rem', fontWeight : '500'}} > 
-              <Typewriter
-          options={{
-              strings: ['오늘의 기도제목은 무엇인가요?'],
-              autoStart: true,
-              loop: true, 
-              delay: 200,    // 타이핑 속도 조절 (ms)
-              deleteSpeed : 20,
-          }}/>
+            <h2 className="text-4xl font-semibold tracking-tight text-white" id="target" style={{fontFamily : 'Jeju Gothic', fontSize : '1.5rem', fontWeight : '500'}} > 
+             오늘의 기도제목은 무엇인가요?
           </h2>
-            <p className="mt-4 text-lg text-gray-300" style={{fontFamily : 'Jeju Myeongjo'}}>
-            {randomComments[rand]}
-            </p>
-            <span className="mt-4 text-lg text-gray-300" style={{fontFamily : 'Jeju Myeongjo'}}>{randomCommentsSource[rand]}</span>
+            <div id="comment" className="mt-4 text-lg text-gray-300" style={{fontFamily : 'Jeju Myeongjo'}}>
+            <Typewriter
+          options={{
+              strings: rand !== null && randomComments[rand] ? randomComments[rand] : '',
+              autoStart: true,
+              delay: rand !== null && randomComments[rand] ? 3500 / (randomComments[rand].length - 1) : 100,
+          }}/>
+            </div>
+            <span className="mt-4 text-lg text-gray-300" style={{fontFamily : 'Jeju Myeongjo'}}>{ rand !== null && randomCommentsSource[rand] ? randomCommentsSource[rand] : '' }</span>
             {/* form 영역 */}
-            <div className="mt-6 flex max-w-md gap-x-4 mb-2">
-                              {/* 성공 메시지 표시 */}
-                              {successMessage && (
-                  <div className="p-3 bg-green-100 text-green-700 rounded-md text-sm mb-4">
-                    {successMessage}
-                  </div>
-                )}
-
-                {/* 에러 메시지 표시 */}
-                {error && (
-                  <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm mb-4">
-                    {error}
-                  </div>
-                )}
-
-              <form onSubmit={handleSubmit}>
+            <div className="mt-6 w-full gap-x-4 mb-2">
+              <form onSubmit={handleSubmit} className='flex flex-row'>
                 <label htmlFor="prayInput" className="sr-only">
                     Text
                   </label>
@@ -149,16 +149,46 @@ export default function HomePage() {
                     ref={inputRef}
                     required
                     placeholder="Enter yours"
-                    className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2  text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                    className="min-w-0 max-w-[100%] rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 flex-grow"
                   />
-                  <button
-                    type="submit"
-                    className="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                  >
-                    submit
-                  </button>
+        <button
+          type="submit"
+          className={`
+            inline-flex items-center justify-center
+            rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs
+            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
+            disabled:bg-gray-500
+            transition-colors duration-300 ease-linear
+            ${submitted ? 'bg-green-500 hover:bg-green-600 focus-visible:outline-green-500' : 'bg-indigo-500 hover:bg-indigo-400 focus-visible:outline-indigo-500'}
+          `}
+        >
+          {submitted ? (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+              <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+          </svg>
+
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clipRule="evenodd" />
+            </svg>
+          )}
+        </button>
+
               </form>
             </div>
+                {/* 성공 메시지 표시 */}
+                    {successMessage && (
+                        <div className="p-3 bg-green-100 text-green-700 rounded-md text-sm mb-4">
+                          {successMessage}
+                        </div>
+                )}
+
+                {/* 에러 메시지 표시 */}
+                {error && (
+                  <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm mb-4">
+                    {error}
+                  </div>
+                )}
             {/* 제출한 답을 공유할지, 한다면 익명으로 할지 선택하는 스위치 영역*/}
             <Disclosure as="div" className="p-3" defaultOpen={true}>
           <DisclosureButton className="group flex w-full items-center justify-between">
@@ -226,19 +256,6 @@ export default function HomePage() {
         />
       </div>
     </div>
-      <div className="relative top-20"> {/* Add relative positioning here */}
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white" style={{fontFamily : 'Jeju Gothic', fontSize : '1.7rem', fontWeight : '500'}}>
-          <Typewriter
-          options={{
-              strings: ['오늘의 기도제목은 무엇인가요?'],
-              autoStart: true,
-              loop: false, // 한 번만 실행
-              delay: 200,    // 타이핑 속도 조절 (ms)
-              //deleteSpeed : 20,
-          }}
-          />
-          </div>
-        </div>
 
     </div>
   );

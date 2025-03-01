@@ -15,5 +15,5 @@ export interface User {
     content: string;
     isAnonymous: boolean;
     isPublic: boolean;
-    submittedAt: string;
+    submittedAt: Date; // 검증 연산위해 Date 객체로 하자
   }

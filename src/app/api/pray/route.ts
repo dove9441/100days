@@ -39,7 +39,7 @@ export async function POST(request : Request){
     });
     if (todaysSubmission) {
         return NextResponse.json(
-        { error: "You can only submit once per day." },
+        { error: "하루에 한 번만 제출 가능합니다." },
         { status: 400 }
         );
     }
