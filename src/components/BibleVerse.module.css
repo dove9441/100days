@@ -1,4 +1,4 @@
-/* components/BibleVerse.module.css (또는 원하는 파일 이름) */
+/* components/BibleVerse.module.css */
 
 .container {
     width: 100%;
@@ -10,11 +10,9 @@
   
   .bibleInfoBox {
     position : relative;
-    left : 18rem;
     margin-bottom: 1.5rem; /* 아래쪽 여백 */
-    border-radius: 0.5rem; /* 둥근 모서리 */
     text-align: center; /* 텍스트 가운데 정렬 */
-    font-size: 0.7rem; /* 글꼴 크기 */
+    font-size: 0.8rem; /* 글꼴 크기 */
     color: #343a40; /* 어두운 회색 글꼴 색상 */
   }
   
@@ -46,6 +44,36 @@
     line-height: 1.6; /* 줄 간격 */
     color: #212529; /* 어두운 글꼴 색상 */
   }
+
+  .g_text{
+
+    color: #11a575;
+    
+    margin-top: 4%;
+    
+    }
+    
+    
+    .b_text{
+    margin-top: 2%;
+    line-height: 200%;
+    font-weight: bold;
+    }
+    
+    
+    
+    .text{
+    
+    color: #4f4f4f;
+    
+    font-weight: normal;
+    
+    margin-top: 2%;
+    
+    line-height: 200%;
+    
+    }
+  
   
   /* 반응형 (선택 사항) */
   @media (min-width: 768px) {
@@ -61,3 +89,5 @@
       flex-shrink: 0;      /* 번호 영역 축소 방지 (큰 화면에서) */
     }
   }
+
+  

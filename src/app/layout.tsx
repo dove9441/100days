@@ -40,7 +40,7 @@ export default async function RootLayout({
       </head>
 
       <body
-        className={`${pretendard.className} antialiased`}
+        className={`${pretendard.className} font-sans antialiased`}
       >
     <Providers session={session}>
               <Nav/>

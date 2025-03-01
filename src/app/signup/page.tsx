@@ -72,7 +72,7 @@ export default function SignupPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              아이디
+              아이디(로그인 시 사용)
             </label>
             <input
               type="text"
@@ -85,14 +85,14 @@ export default function SignupPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              닉네임
+              이름 또는 별명
             </label>
             <input
               type="text"
               name="nickname"
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="닉네임을 입력하세요"
+              placeholder="이름을 입력하세요"
             />
           </div>
 
@@ -144,6 +144,7 @@ export default function SignupPage() {
               className="text-sm font-medium text-gray-700"
             >
               아이디만 사용하기
+              <span className="text-xs text-gray-400">(비밀번호 없이 로그인)</span>
             </label>
           </div>
 
@@ -152,7 +153,7 @@ export default function SignupPage() {
             disabled={isLoading}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
           >
-            {isLoading ? "처리 중..." : "회원가입"}
+            {isLoading ? "처리 중..." : "가입"}
           </button>
         </form>
 

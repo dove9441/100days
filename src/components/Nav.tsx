@@ -19,14 +19,15 @@ export default function Nav() {
 
     const navigation = [
         { name: 'Home', href: '/home', current: pathname === '/home' },
-        { name: 'Dashboard', href: '/dashboard', current: pathname === '/dashboard' },
-        { name: 'QT', href: '/today_qt', current: pathname === '/today_qt' }, // today_qt를 today-qt로 고치는 것을 추천
-        { name: 'Calendar', href: '#', current: false },
+        { name: 'Leaderboard', href: '/dashboard', current: pathname === '/dashboard' },
+        { name: '오늘의 묵상', href: '/today_qt', current: pathname === '/today_qt' }, 
+        { name: 'Nav4', href: '#', current: false },
       ]
   return (
     <Disclosure as="nav" className="bg-white-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
+          {/** 햄버거 버튼 div */}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white hover:text-black focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
@@ -38,12 +39,12 @@ export default function Nav() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="images/defaultuser.png"
-                className="h-8 w-auto"
-              />
+              { /* 로고 영역 */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+      </svg>
             </div>
+            {/** PC NAV 영역 */}
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (

@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        rubik: ["Rubik", "sans-serif"], // 'Rubik' 폰트 추가
+        sans: ["Roboto", "sans-serif"], // 
         // 다른 사용자 정의 폰트도 여기에 추가 가능
       },
       colors: {

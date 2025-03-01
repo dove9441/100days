@@ -19,14 +19,15 @@ export async function POST(request : Request){
     const formData = await request.json();
 
     const client = await clientPromise;
+
     const db = client.db(process.env.MONGODB_DB);
     const submissions = db.collection('prays');
 
     const lastSubmission = await submissions.findOne(
         { userId: userId },
         { sort: { submittedAt: -1 } } // 최신 순으로 정렬
-      );
-  
+        );
+    
     // 날짜 기준 1일 1회 제출 검증
     const today = new Date();
     const todayKST = toZonedTime(today, 'Asia/Seoul');
@@ -39,7 +40,7 @@ export async function POST(request : Request){
     });
     if (todaysSubmission) {
         return NextResponse.json(
-        { error: "하루에 한 번만 제출 가능합니다." },
+        { error: "오늘은 이미 제출했습니다." },
         { status: 400 }
         );
     }
@@ -63,7 +64,8 @@ export async function POST(request : Request){
 
     console.log("Form data:", formData, "submitted by:", session.user);
 
-  
-  
+    
+    
     return NextResponse.json({ message: "stored successfully!" });
+    
 }

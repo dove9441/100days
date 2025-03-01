@@ -190,7 +190,7 @@ export default function HomePage() {
                   </div>
                 )}
             {/* 제출한 답을 공유할지, 한다면 익명으로 할지 선택하는 스위치 영역*/}
-            <Disclosure as="div" className="p-3" defaultOpen={true}>
+            <Disclosure as="div" className="p-3" defaultOpen={false}>
           <DisclosureButton className="group flex w-full items-center justify-between">
             <ChevronDownIcon className="size-5 fill-white/60 group-data-[hover]:fill-white/50 group-data-[open]:rotate-180 m-auto mb-2" />
           </DisclosureButton>
@@ -238,9 +238,9 @@ export default function HomePage() {
             <div className="flex flex-col items-start">
               <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
               </div>
-              <dt className="mt-4 text-base font-semibold text-white">Weekly articles</dt>
+              <dt className="mt-4 text-base font-semibold text-white">placeholder</dt>
               <dd className="mt-2 text-base/7 text-gray-400">
-                Non laboris consequat cupidatat laborum magna. Eiusmod non irure cupidatat duis commodo amet.
+                    다람쥐 헌 쳇바퀴에 타고파
               </dd>
             </div>
           </dl>
