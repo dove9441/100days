@@ -1,0 +1,63 @@
+/* components/BibleVerse.module.css (또는 원하는 파일 이름) */
+
+.container {
+    width: 100%;
+    max-width: 800px; /* 최대 너비 제한 (선택 사항) */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 1rem;
+    font-family: sans-serif; /* 원하는 글꼴 */
+  }
+  
+  .bibleInfoBox {
+    position : relative;
+    left : 18rem;
+    margin-bottom: 1.5rem; /* 아래쪽 여백 */
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    font-size: 0.7rem; /* 글꼴 크기 */
+    color: #343a40; /* 어두운 회색 글꼴 색상 */
+  }
+  
+  .verseList {
+    list-style: none; /* 기본 목록 스타일 제거 */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .verseItem {
+    border-bottom: 1px solid #dee2e6; /* 각 구절 아래 구분선 */
+    padding: 1rem 0;
+    display: flex; /* Flexbox 레이아웃 사용 */
+    flex-direction: column; /* 세로 방향 정렬 */
+  }
+  .verseItem:last-child{
+      border-bottom: none; /* 마지막 요소의 테두리 제거*/
+  }
+  
+  .verseIndex {
+    font-size: 0.9rem; /* 구절 번호 글꼴 크기 */
+    color: #6c757d; /* 회색 글꼴 색상 */
+    margin-bottom: 0.5rem; /* 번호와 본문 사이 간격 */
+    font-weight: bold;     /* 번호 강조 (선택 사항) */
+  }
+  
+  .verseText {
+    font-size: 1.1rem; /* 본문 글꼴 크기 */
+    line-height: 1.6; /* 줄 간격 */
+    color: #212529; /* 어두운 글꼴 색상 */
+  }
+  
+  /* 반응형 (선택 사항) */
+  @media (min-width: 768px) {
+    .verseItem {
+      flex-direction: row; /* 가로 방향 정렬 (큰 화면에서) */
+      align-items: flex-start; /* 번호와 본문을 위쪽 정렬 */
+    }
+  
+    .verseIndex {
+      margin-right: 1rem;  /* 번호와 본문 사이 간격 (큰 화면에서)*/
+      margin-bottom: 0;   /* 세로 간격 제거 (큰 화면에서) */
+      width: 4rem;        /* 번호 영역 너비 고정 (큰 화면에서, 선택 사항) */
+      flex-shrink: 0;      /* 번호 영역 축소 방지 (큰 화면에서) */
+    }
+  }

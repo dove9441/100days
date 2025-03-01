@@ -1,0 +1,61 @@
+// Form Submit api 서버
+import { getServerSession } from 'next-auth/next';
+import { NextResponse } from 'next/server';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import clientPromise from '@/lib/db';
+import { Pray } from '@/types';
+import { ObjectId } from 'mongodb';
+
+export async function POST(request : Request){
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 }); // 또는 리디렉션
+    }
+    const userId = session.user.id;
+    const formData = await request.json();
+
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    const submissions = db.collection('prays');
+
+    const lastSubmission = await submissions.findOne(
+        { userId: userId },
+        { sort: { submittedAt: -1 } } // 최신 순으로 정렬
+      );
+  
+    // 날짜 기준 1일 1회 제출 검증
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 시간, 분, 초, 밀리초를 0으로 설정
+
+    // 2. 해당 사용자의 오늘 날짜 제출 기록 조회.  $gte (보다 크거나 같음) 연산자 사용
+    const todaysSubmission = await submissions.findOne({
+        userId: new ObjectId(userId),
+        submittedAt: { $gte: today },
+    });
+    if (todaysSubmission) {
+        return NextResponse.json(
+        { error: "You can only submit once per day." },
+        { status: 400 }
+        );
+    }
+    
+    // userId는 type.ts에서 string인데 바꿔주기 위함
+    const pray: Omit<Pray, 'userId'> & { userId : ObjectId } ={
+        userId: new ObjectId(userId), // ObjectId로 저장
+        username: session.user.username,
+        nickname: session.user.nickname,
+        content: formData.content,
+        isAnonymous: formData.isAnonymous,
+        isPublic: formData.isPublic,
+        submittedAt: new Date(), // 현재 시간 저장
+    };
+    await submissions.insertOne(pray);
+
+
+
+    console.log("Form data:", formData, "submitted by:", session.user);
+
+  
+  
+    return NextResponse.json({ message: "stored successfully!" });
+}
