@@ -6,6 +6,10 @@ import clientPromise from '@/lib/db';
 import { Pray } from '@/types';
 import { ObjectId } from 'mongodb';
 
+// UTC로 기본적으로 저장돼서 서울시간으로 바꿔줘야함
+import { format, toZonedTime } from 'date-fns-tz';
+import { ko } from 'date-fns/locale';
+
 export async function POST(request : Request){
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -25,12 +29,13 @@ export async function POST(request : Request){
   
     // 날짜 기준 1일 1회 제출 검증
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // 시간, 분, 초, 밀리초를 0으로 설정
+    const todayKST = toZonedTime(today, 'Asia/Seoul');
+    todayKST.setHours(0, 0, 0, 0); // 시간, 분, 초, 밀리초를 0으로 설정
 
     // 2. 해당 사용자의 오늘 날짜 제출 기록 조회.  $gte (보다 크거나 같음) 연산자 사용
     const todaysSubmission = await submissions.findOne({
         userId: new ObjectId(userId),
-        submittedAt: { $gte: today },
+        submittedAt: { $gte: todayKST },
     });
     if (todaysSubmission) {
         return NextResponse.json(
@@ -38,16 +43,19 @@ export async function POST(request : Request){
         { status: 400 }
         );
     }
+
+    const KST = toZonedTime(new Date(), 'Asia/Seoul'); // UTC -> KST
+
     
     // userId는 type.ts에서 string인데 바꿔주기 위함
-    const pray: Omit<Pray, 'userId'> & { userId : ObjectId } ={
+    const pray: Omit<Pray, 'userId'> & { userId : ObjectId } = {
         userId: new ObjectId(userId), // ObjectId로 저장
         username: session.user.username,
         nickname: session.user.nickname,
         content: formData.content,
         isAnonymous: formData.isAnonymous,
         isPublic: formData.isPublic,
-        submittedAt: new Date(), // 현재 시간 저장
+        submittedAt: KST, // 2025-03-01T19:19:26.228+09:00 형식 string
     };
     await submissions.insertOne(pray);
 

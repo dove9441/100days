@@ -3,7 +3,7 @@
 
 import Typewriter from 'typewriter-effect';
 import { Switch, Description, Field, Label} from '@headlessui/react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useSession } from 'next-auth/react';
@@ -32,9 +32,10 @@ const randomCommentsSource = ["마태복음 7:7~8","마가복음 11:24","빌립�
 export default function HomePage() {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
-  const [content, setContent] = useState(''); // 기도제목 입력값 상태
   const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지
   const [error, setError] = useState<string | null>(null);
+  //const [content, setContent] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // hydration 오류가 나서 써야함. 
   const [rand, setRand] = useState(0);
@@ -45,15 +46,11 @@ export default function HomePage() {
   // 폼 제출 Handling  영역
   const {data: session, status} = useSession();
   const router = useRouter();
-  console.log(session);
+  //console.log(session);
 
-  const handlePrayChange = (event : React.ChangeEvent<HTMLInputElement>) =>{
-    setContent(event.target.value);
-  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // 기본 폼 제출 동작 방지
-
     if (status === "loading") {
         return; 
     }
@@ -66,29 +63,34 @@ export default function HomePage() {
 
     try {
       // 유저 id, username 체크는 api서버에서 하도록
-
-      const response = await fetch('/api/pray', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content,
-          isAnonymous,
-          isPublic,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || '기도제목 저장 실패');
+      var content = '';
+      if(inputRef.current){
+        content = inputRef.current.value
+        console.log('Submitted value:', inputRef.current.value);
+        const response = await fetch('/api/pray', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content,
+            isAnonymous,
+            isPublic,
+          }),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || '기도제목 저장 실패');
+        }
+        setSuccessMessage('기도제목이 저장되었습니다.');
+        inputRef.current.value = '';
       }
-      setSuccessMessage('기도제목이 저장되었습니다.');
-      setContent('');
+
       // 다른 성공 처리 (예: 입력 필드 초기화, 성공 메시지 표시)
     } catch (error : any) {
         setError(error instanceof Error ? error.message : "알 수 없는 오류 발생");
-      // 에러 처리
+        setSuccessMessage('');
     }
 
   };
@@ -144,7 +146,7 @@ export default function HomePage() {
                     id="prayInput"
                     name="pray"
                     type="text"
-                    onChange={handlePrayChange}
+                    ref={inputRef}
                     required
                     placeholder="Enter yours"
                     className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2  text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"

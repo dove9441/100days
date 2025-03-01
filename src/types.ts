@@ -15,5 +15,5 @@ export interface User {
     content: string;
     isAnonymous: boolean;
     isPublic: boolean;
-    submittedAt: Date;
+    submittedAt: string;
   }
