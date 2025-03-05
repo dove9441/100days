@@ -1,15 +1,8 @@
-// app/leaderboard/page.tsx
 import { MongoClient, ObjectId } from 'mongodb';
+import { Pray }  from '@/types';
 
-interface Submission {
+interface Submission extends Pray{
   _id: string; // ObjectId를 string으로
-  userId: string; // ObjectId를 string으로
-  username: string;
-  nickname: string;
-  content: string;
-  isAnonymous: boolean;
-  isPublic: boolean;
-  submittedAt: string; // ISO string
 }
 
 async function getData() {
@@ -21,31 +14,31 @@ async function getData() {
 }
 
 // 제출 횟수를 계산하는 함수
-function countSubmissions(data: Submission[]): { [nickname: string]: number } {
+function countSubmissions(data: Submission[]): { [nickname: string]: number } { //return값은 {nickname : number}의 dict
   const counts: { [nickname: string]: number } = {};
   data.forEach((item) => {
-    counts[item.nickname] = (counts[item.nickname] || 0) + 1;
+    counts[item.nickname] = (counts[item.username] || 0) + 1;
   });
   return counts;
 }
 
 
+
+
 export default async function Leaderboard() {
   const response: Submission[] = await getData(); // 타입 명시
+  //console.log(response);
   const submissionCounts = countSubmissions(response);
 
   const sortedSubmissions = Object.entries(submissionCounts).sort(
     ([, countA], [, countB]) => countB - countA
   );
 
-
   return (
     <div className="p-4 text-white" style={{
       backgroundImage: "url(" + "images/bg.jpg" + ")",
       backgroundPosition: 'center',
       backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      height: "100vh",
     }}>
       <div className="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32" style={{ fontFamily: 'Jeju Gothic' }}>
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -58,26 +51,18 @@ export default async function Leaderboard() {
           </div>
         </div>
         {/* end of title area */}
-        <div className="mt-5 bg-green-400">
-        <ul role="list" className="divide-y divide-gray-100">
-          {sortedSubmissions.map(([nickname, count]) => (
-            <li key={nickname}>
-              <div className="flex min-w-0 gap-x-4 ml-3">
-                <div className="min-w-0 flex-auto">
-                  <p className="text-xl font-semibold text-white-900">{nickname}</p>
-                  <p className="mt-1 truncate text-xs/5 text-gray-500">
-                    제출 횟수: {count}
-                  </p>
-                </div>
+        {/** start of list area */}
+        <div className="mt-5 bg-gray-700">
+          {sortedSubmissions.map(([nickname, count],index) => (
+              <div key={nickname} className="border p-4 rounded-md shadow">
+                  <h1 className='inline'>{index}  </h1>
+                  <h2 className="inline text-lg font-semibold">{nickname}</h2>
+                  <p>{count}/100</p> 
               </div>
-            </li>
-          ))}
-        </ul>
+        ))}
+        </div>
+        {/*end of list area */}
       </div>
-
-      </div>
-
-      
     </div>
   );
 }

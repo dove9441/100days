@@ -33,7 +33,7 @@ export async function POST(request : Request){
     const todayKST = toZonedTime(today, 'Asia/Seoul');
     todayKST.setHours(0, 0, 0, 0); // 시간, 분, 초, 밀리초를 0으로 설정
 
-    // 2. 해당 사용자의 오늘 날짜 제출 기록 조회.  $gte (보다 크거나 같음) 연산자 사용
+    // 2. 해당 사용자의 오늘 날짜 제출 기록 조회
     const todaysSubmission = await submissions.findOne({
         userId: new ObjectId(userId),
         submittedAt: { $gte: todayKST },
@@ -51,7 +51,7 @@ export async function POST(request : Request){
     // userId는 type.ts에서 string인데 바꿔주기 위함
     const pray: Omit<Pray, 'userId'> & { userId : ObjectId } = {
         userId: new ObjectId(userId), // ObjectId로 저장
-        username: session.user.username,
+        username: session.user.nickname,
         nickname: session.user.nickname,
         content: formData.content,
         isAnonymous: formData.isAnonymous,

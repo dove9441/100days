@@ -19,9 +19,9 @@ export default function Nav() {
 
     const navigation = [
         { name: 'Home', href: '/home', current: pathname === '/home' },
-        { name: 'Leaderboard', href: '/dashboard', current: pathname === '/dashboard' },
+        { name: 'Leaderboard', href: '/leaderboard', current: pathname === '/leaderboard' },
         { name: '오늘의 묵상', href: '/today_qt', current: pathname === '/today_qt' }, 
-        { name: 'Nav4', href: '#', current: false },
+        { name: '나눔터', href: '/list', current: pathname === '/list' },
       ]
   return (
     <Disclosure as="nav" className="bg-white-800">
