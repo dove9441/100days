@@ -236,11 +236,9 @@ export default function HomePage() {
           </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2">
             <div className="flex flex-col items-start">
-              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-              </div>
-              <dt className="mt-4 text-base font-semibold text-white">placeholder</dt>
+              <dt className="mt-4 text-base font-semibold text-white">{/*placeholder*/}</dt>
               <dd className="mt-2 text-base/7 text-gray-400">
-                    다람쥐 헌 쳇바퀴에 타고파
+                    {/*다람쥐 헌 쳇바퀴에 타고파*/}
               </dd>
             </div>
           </dl>

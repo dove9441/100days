@@ -30,16 +30,19 @@ export default async function RootLayout({
 }>) {
 
   const session = await getServerSession(authOptions);
+  
   return (
     <html lang="kr" className={`${pretendard.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta name="color-scheme" content="light only"/>
+        <meta name="supported-color-schemes" content="light"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/jejumyeongjo.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/jejugothic.css"/>
       </head>
 
-      <body
+      <body data-theme="light"
         className={`${pretendard.className} font-sans antialiased`}
       >
     <Providers session={session}>

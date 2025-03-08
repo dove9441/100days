@@ -17,6 +17,7 @@
     "@mui/material": "^6.4.6",
     "@mui/x-data-grid": "^7.27.2",
     "@tailwindcss/postcss": "^4.0.9",
+    "antd": "^5.24.3",
     "bcryptjs": "^3.0.2",
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",

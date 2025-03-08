@@ -2,7 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react"; 
+import { useState } from "react"; 
 import Link from "next/link";
 
 export default function SignupPage() {

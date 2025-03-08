@@ -11,7 +11,6 @@
   .bibleInfoBox {
     position : relative;
     margin-bottom: 1.5rem; /* 아래쪽 여백 */
-    text-align: center; /* 텍스트 가운데 정렬 */
     font-size: 0.8rem; /* 글꼴 크기 */
     color: #343a40; /* 어두운 회색 글꼴 색상 */
   }

@@ -35,7 +35,7 @@ export default function LoginPage() {
       }
 
       // 로그인 성공 시 홈 페이지로 리다이렉트
-      router.push("/");
+      router.push("/home");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "로그인 실패";
       setError(errorMessage);
