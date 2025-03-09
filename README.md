@@ -34,7 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# 100days
+
 
 ```
 ssh -i /Users/admin/.ssh/id_rsa username@ip
@@ -64,4 +64,26 @@ node --version
 nvm use 23.7.0
 npm install next --legacy-peer-deps
 npm run start
+kill -9 $(pgrep -f '^next-server')
+```
+```
+# sudo vi /etc/nginx/sites-available/default
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Accept-Encoding "";
+    }
+}
 ```
