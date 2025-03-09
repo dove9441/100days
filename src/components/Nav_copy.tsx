@@ -1,5 +1,7 @@
 'use client';
 
+
+// 햄버거 버튼 Nav, (탭형으로 대체됨)
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {useSession, signOut} from 'next-auth/react';

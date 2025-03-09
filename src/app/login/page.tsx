@@ -2,7 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react"; // useRef, useEffect import
+import { useState, useRef, useEffect } from "react"; 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 
@@ -21,7 +21,7 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget);
     const credentials = {
       username: formData.get("username") as string,
-      password: isIdOnly ? "" : (formData.get("password") as string), // 조건부 비밀번호
+      password: isIdOnly ? "" : (formData.get("password") as string), // 조건부 비밀번호 
     };
 
     try {
@@ -34,7 +34,7 @@ export default function LoginPage() {
         throw new Error(result.error);
       }
 
-      // 로그인 성공 시 홈 페이지로 리다이렉트
+      // 로그인 성공 시 홈페이지로 리다이렉트
       router.push("/home");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "로그인 실패";

@@ -19,7 +19,7 @@ async function getData() {
 export default async function List(){
     const response: Submission[] = await getData();
     const sortedResponse = response.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()); // 최신순 정렬
-    console.log(response);
+    //console.log(response);
 
 
     return(

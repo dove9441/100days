@@ -61,8 +61,8 @@ export default async function Today_qt() {
                     let verseText = text;
 
                     if (match) { // 번호와 텍스트 분리
-                        verseIndex = match[1]; // 첫 번째 그룹 (숫자)
-                        verseText = match[2]; // 두 번째 그룹 (나머지 텍스트)
+                        verseIndex = match[1]; // 숫자, 절 번호
+                        verseText = match[2]; // 구절
                     }
 
                     return (

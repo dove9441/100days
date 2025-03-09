@@ -26,7 +26,7 @@ export default function SignupPage() {
       isIdOnly : isIdOnly,
     };
 
-    // 간단한 클라이언트 측 유효성 검사 (비밀번호 사용 시)
+    // 클라이언트측 유효성 검사 (비밀번호 사용 시)
     if (!isIdOnly && data.password !== data.confirmPassword) {
       setError("비밀번호가 일치하지 않습니다.");
       setIsLoading(false);
@@ -47,7 +47,7 @@ export default function SignupPage() {
         throw new Error(errorData.error || "Error");
       }
 
-      // 회원가입 성공 시 로그인 페이지로 리다이렉트
+      // 회원가입 성공 시 로그인페이지로 리다이렉트
       router.push("/login");
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류 발생");
