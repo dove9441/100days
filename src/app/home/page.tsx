@@ -34,7 +34,7 @@ export default function HomePage() {
   const [successMessage, setSuccessMessage] = useState(''); // 성공 메시지
   const [error, setError] = useState<string | null>(null);
   //const [content, setContent] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const [submitted, setSubmitted] = useState(false);
   // hydration 오류가 나서 써야함. 
@@ -142,10 +142,9 @@ export default function HomePage() {
                 <label htmlFor="prayInput" className="sr-only">
                     Text
                   </label>
-                  <input
+                  <textarea
                     id="prayInput"
                     name="pray"
-                    type="text"
                     ref={inputRef}
                     required
                     placeholder="Enter yours"

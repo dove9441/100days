@@ -8,7 +8,7 @@ interface Submission extends Pray {
 }
 
 async function getData() {
-  const res = await fetch('http://localhost:3000/api/search'); // 서버 컴포넌트에서 직접 호출 시에는 절대경로
+  const res = await fetch('http://localhost:3000/api/search', { cache: 'no-store' }); // 서버 컴포넌트에서 직접 호출 시에는 절대경로
   if (!res.ok) {
     throw new Error('Failed to fetch data');
   }
@@ -19,7 +19,7 @@ async function getData() {
 export default async function List(){
     const response: Submission[] = await getData();
     const sortedResponse = response.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()); // 최신순 정렬
-    //console.log(response);
+    console.log(response);
 
 
     return(
@@ -35,7 +35,7 @@ export default async function List(){
                   </div>
                 </div>
                 <div className='PostCard_footer__9J5Wd'>
-                  <span className='PostCard_userInfo__Cu1X5'><span style={{'color':'#868e96'}}>by&nbsp;</span><b>{item.nickname}</b></span>
+                  <span className='PostCard_userInfo__Cu1X5'><span style={{'color':'#868e96'}}>by&nbsp;</span><b>{item.isAnonymous ? "익명" : item.nickname}</b></span>
                 </div>
               </li>
 

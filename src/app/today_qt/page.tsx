@@ -2,7 +2,7 @@ import * as cheerio from 'cheerio';
 import styles from '@/components/BibleVerse.module.css';
 
 async function getBibleData() {
-    const response = await fetch('https://sum.su.or.kr:8888/bible/today', { cache: 'no-store' });
+    const response = await fetch('https://sum.su.or.kr:8888/bible/today', { next: { revalidate: 86400 },});
     const html = await response.text();
     const $ = cheerio.load(html);
 
