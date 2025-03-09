@@ -35,3 +35,33 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # 100days
+
+```
+ssh -i /Users/admin/.ssh/id_rsa username@ip
+sftp -i /Users/admin/.ssh/id_rsa username@ip
+cd lcd pwd !pwd ls !ls put -r [dir]
+put package.json put .env.local
+```
+```
+sudo apt update -y
+sudo apt install -y cron
+sudo service cron start
+sudo systemctl enable cron.service
+sudo systemctl list-unit-files | grep cron
+sudo service cron status
+```
+```
+npm install -g pm2
+pm2 start npm --name <app-name> -- start 
+pm2 list
+pm2 logs <app-name>
+pm2 restart <app-name> 
+pm2 stop <app-name> 
+pm2 delete <app-name> 
+```
+```
+node --version
+nvm use 23.7.0
+npm install next --legacy-peer-deps
+npm run start
+```
